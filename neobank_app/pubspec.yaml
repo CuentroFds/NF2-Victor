@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   intl: ^0.19.0
+  flutter_multi_formatter: ^2.13.10
+  pubspec: ^2.3.0
 
 dev_dependencies:
   flutter_test:

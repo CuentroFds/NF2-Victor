@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class TransferPage extends StatefulWidget {
   const TransferPage({super.key});
@@ -42,9 +43,15 @@ class _TransferPageState extends State<TransferPage> {
 
               const SizedBox(height: 20),
 
+
               TextFormField(
                 controller: _amountController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  CurrencyInputFormatter(
+                    leadingSymbol: MoneySymbols.DOLLAR_SIGN
+                  )
+                ],
                 decoration: const InputDecoration(
                   labelText: "Valor (R\$)",
                   border: OutlineInputBorder(),
@@ -61,7 +68,7 @@ class _TransferPageState extends State<TransferPage> {
               const SizedBox(height: 20),
 
               DropdownButtonFormField<String>(
-                value: selectedBank,
+                initialValue: selectedBank,
                 decoration: const InputDecoration(
                   labelText: "Banco",
                   border: OutlineInputBorder(),
@@ -76,8 +83,31 @@ class _TransferPageState extends State<TransferPage> {
 
               ElevatedButton(
                 onPressed: () {
+                    Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const Text('AlertDialog description'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      ),
+      child: const Text('Show Dialog'),
+    );
+  }
                   if (_formKey.currentState!.validate()) {
                     final amount = double.parse(_amountController.text.replaceAll(',', '.'));
+                    
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("Transferência de R\$ ${amount.toStringAsFixed(2)} enviada!"),
